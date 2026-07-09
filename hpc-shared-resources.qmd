@@ -20,6 +20,7 @@ In `/kuhpc/work/biostat/sw` you can find the following shared resources:
 │   ├── human/
 │   └── mouse/
 └── internal_pipelines/
+    └── nextflow/            # shared nf-core config (ku_crc.config)
 ```
 
 ::: callout-note

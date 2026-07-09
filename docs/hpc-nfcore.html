@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Using Conda Environments in the HPC – Bioinformatics</title>
+<title>Using nf-core Pipelines in the HPC – Bioinformatics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -183,11 +183,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setting-up-the-conda-environment-variable" id="toc-setting-up-the-conda-environment-variable" class="nav-link active" data-scroll-target="#setting-up-the-conda-environment-variable">Setting up the <code>$CONDA</code> environment variable</a>
-  <ul class="collapse">
-  <li><a href="#setting-conda-within-the-current-environment" id="toc-setting-conda-within-the-current-environment" class="nav-link" data-scroll-target="#setting-conda-within-the-current-environment">Setting <code>$CONDA</code> within the current environment</a></li>
-  <li><a href="#setting-conda-permanently" id="toc-setting-conda-permanently" class="nav-link" data-scroll-target="#setting-conda-permanently">Setting <code>$CONDA</code> permanently</a></li>
-  </ul></li>
+  <li><a href="#using-the-shared-ku_crc.config-file" id="toc-using-the-shared-ku_crc.config-file" class="nav-link active" data-scroll-target="#using-the-shared-ku_crc.config-file">Using the shared <code>ku_crc.config</code> file</a></li>
+  <li><a href="#submitting-nf-core-pipeline-jobs" id="toc-submitting-nf-core-pipeline-jobs" class="nav-link" data-scroll-target="#submitting-nf-core-pipeline-jobs">Submitting <code>nf-core</code> pipeline jobs</a></li>
   </ul>
 </nav>
     </div>
@@ -196,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Using Conda Environments in the HPC</h1>
+<h1 class="title">Using <code>nf-core</code> Pipelines in the HPC</h1>
 </div>
 
 
@@ -213,54 +210,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This page details using shared conda environments in the <code>biostat</code> partition of the KUHPC.</p>
-<section id="setting-up-the-conda-environment-variable" class="level2">
-<h2 class="anchored" data-anchor-id="setting-up-the-conda-environment-variable">Setting up the <code>$CONDA</code> environment variable</h2>
-<p>The <code>biostat</code> partition maintains a set of shared conda environments located at <code>/kuhpc/work/biostat/sw/conda/envs</code> that are used for common bioinformatic pipelines and data types. Rather than typing the full path every time you want to activate a shared environment, we encourage users to set a <code>$CONDA</code> environment variable that points to that directory. This lets you activate any shared environment with a short, readable command like:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$CONDA</span>/name-of-env</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>To see what shared environments are available, visit the <a href="./hpc-shared-resources.html">Shared Resources</a> page.</p>
+<p>This page details running <code>nf-core</code> pipelines in the <code>biostat</code> partition of the KUHPC using the shared Nextflow configuration file.</p>
+<p>nf-core is a global community of people that collaborate to build open-source Nextflow pipelines. They have pipelines for many common bioinformatics data analyses. For more information about the nf-core community and the curated pipelines available, please visit <a href="https://nf-co.re/">their documentation</a>. If you have questions about using a pipeline, you are encouraged to connect directly to the team that maintains the specific pipeline you are using via their Slack, which you can request to join on <a href="https://nf-co.re/join">this page</a>.</p>
+<section id="using-the-shared-ku_crc.config-file" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-shared-ku_crc.config-file">Using the shared <code>ku_crc.config</code> file</h2>
+<p>In order to have the Nextflow pipeline properly run on our HPC system, users need to use a configuration file, or config file, specifically created to the properties of our HPC. Rather than have every user create their own, the <code>biostat</code> partition maintains a shared Nextflow config file located at <code>/kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config</code>. This file configures Nextflow to submit processes to the SLURM scheduler on the correct partition/account, sets up the shared Singularity container cache and bind paths, and sets sensible default resource requests (CPUs, memory, time) per process. Passing this file with <code>-c</code> when you launch a pipeline means you don’t need to write or maintain your own infrastructure config.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Benefit of shared conda environments
+<span class="screen-reader-only">Tip</span>Benefit of the shared <code>ku_crc.config</code> file
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Using shared conda environments means you don’t need to build and maintain your own environment for common workflows. This saves setup time, reduces redundant storage use on the partition, and gives you access to a curated set of tools without any installation steps.</p>
+<p>Using the shared config means you don’t need to figure out SLURM account/partition settings, container cache directories, or per-process resource defaults yourself. This saves setup time and keeps Singularity images from being re-downloaded by every user.</p>
 </div>
 </div>
-<p>Use one of the two following options to set the <code>$CONDA</code> variable:</p>
-<section id="setting-conda-within-the-current-environment" class="level3">
-<h3 class="anchored" data-anchor-id="setting-conda-within-the-current-environment">Setting <code>$CONDA</code> within the current environment</h3>
-<p>To use the shorthand in your current terminal session, run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">CONDA</span><span class="op">=</span>/kuhpc/work/biostat/sw/conda/envs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You can then activate any shared environment using just its name:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$CONDA</span>/name-of-env</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>This must be done each new login or node
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Whether you are logging in again or entering a new node for a submitted job, it is necessary to again export <code>$CONDA</code> each time. Otherwise, you will need to use the full path. If you are seeing errors like “environment not found,” it is always worth checking whether <code>$CONDA</code> is set by running <code>echo $CONDA</code>.</p>
-</div>
-</div>
+<p>To run an <code>nf-core</code> pipeline with the shared config, first load Nextflow:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load nextflow</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then run your pipeline, passing the shared config with <code>-c</code>. No <code>-profile</code> is needed since <code>ku_crc.config</code> already configures the executor and container settings:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/<span class="op">&lt;</span>pipeline<span class="op">&gt;</span> -c /kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="setting-conda-permanently" class="level3">
-<h3 class="anchored" data-anchor-id="setting-conda-permanently">Setting <code>$CONDA</code> permanently</h3>
-<p>Rather than running the export command each time, users are encouraged to set this variable permanently in their <code>.bashrc</code> profile file. For more information about this type of file, here is a <a href="https://www.marquette.edu/high-performance-computing/bashrc.php">general overview of the file type</a>.</p>
-<p>Users <strong>only have to do this process one time</strong>. To add this variable to your <code>.bashrc</code>, run the following:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.bashrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>which will open the file to edit. You will then paste the following in the file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">CONDA</span><span class="op">=</span>/kuhpc/work/biostat/sw/conda/envs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>and then close and save the file. If you run <code>cat ~/.bashrc</code> you should see the line that you added. This means that you have successfully added this variable. For this one session, you will need to reload the file to apply the change using <code>source ~/.bashrc</code> or by reopening the terminal. After this, it will automatically be set each time you log in.</p>
+<section id="submitting-nf-core-pipeline-jobs" class="level2">
+<h2 class="anchored" data-anchor-id="submitting-nf-core-pipeline-jobs">Submitting <code>nf-core</code> pipeline jobs</h2>
+<p><code>nf-core</code> pipelines are typically launched from a submitted job whose only responsibility is to run the head Nextflow process. Nextflow itself then submits each pipeline step as its own SLURM job using the executor settings from <code>ku_crc.config</code>. A submitted job to run an nf-core pipeline would look something like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=nfcore_pipeline</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=nfcore_pipeline_%j.out</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=nfcore_pipeline_%j.err</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=24:00:00</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=1</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=4G</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load nextflow</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/<span class="op">&lt;</span>pipeline<span class="op">&gt;</span> -c /kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -271,27 +260,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you set the variable in your <code>.bashrc</code> file, you must source that file in any submitted shell script so the job inherits your environment. You also need to initialize conda before activating an environment. A submitted job would look something like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=my_job</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=my_job_%j.out</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=my_job_%j.err</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=01:00:00</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=8G</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$CONDA</span>/name-of-env</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> your_script.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Notice that <code>source ~/.bashrc</code> is called first to load your saved environment variables (including <code>$CONDA</code>) and to initialize conda, before calling <code>conda activate</code>.</p>
+<p>Submitted jobs must <code>source ~/.bashrc</code> before calling <code>module load nextflow</code>. Without it, the module system will not be initialized in the job’s shell and <code>module load</code> will fail, even if it works fine when you run it interactively. This allows the submitted job to have access to the variables such as <code>$WORK</code> and <code>$HOME</code> that are associated with your account.</p>
 </div>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
