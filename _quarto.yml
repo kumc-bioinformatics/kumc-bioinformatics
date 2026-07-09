@@ -22,6 +22,8 @@ website:
             text: Using Conda
           - href: hpc-images.qmd
             text: Using Singularity Images
+          - href: hpc-nfcore.qmd
+            text: Using `nf-core` Pipelines
       - href: hpc-shared-resources.qmd
         text: Shared Resources
       - href: best-practices.qmd

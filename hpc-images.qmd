@@ -1,9 +1,147 @@
 ---
-
----
 title: "Using Shared Singularity Images in the HPC"
 ---
 
 This page details using shared Singularity images in the `biostat` partition of the KUHPC.
 
+For more information and an introduction to Singularity/Apptainer, see the following resources:
+
+-   [An introduction to images and containerization](https://medium.com/@stefan.paladuta17/introduction-to-containerization-a-beginners-walkthrough-f5dc2508e16f#9209)
+
+-   [An introduction to Singularity/Apptainer](https://apptainer.org/user-docs/3.8/introduction.html)
+
+-   [How to build your own images](https://apptainer.org/user-docs/3.8/build_a_container.html)
+
 ## Setting up the `$SINGULARITY` environment variable
+
+The `biostat` partition maintains a set of shared Singularity images located at `/kuhpc/work/biostat/sw/tools_softwares/images` that are used for common bioinformatic pipelines and data types. Rather than typing the full path every time you want to use a shared image, we encourage users to set a `$SINGULARITY` environment variable that points to that directory. This lets you reference any shared image with a short, readable command like:
+
+``` bash
+singularity shell $SINGULARITY/name-of-image/image.sif
+```
+
+To see what shared images are available, visit the [Shared Resources](hpc-shared-resources.qmd) page.
+
+::: callout-tip
+## Benefit of shared Singularity images
+
+Using shared Singularity images means you don't need to build and maintain your own image for common tools and workflows. This saves setup time, reduces redundant storage use on the partition, and gives you access to a curated set of pre-built, tested images without any build steps.
+:::
+
+Use one of the two following options to set the `$SINGULARITY` variable:
+
+### Setting `$SINGULARITY` within the current environment
+
+To use the shorthand in your current terminal session, run:
+
+``` bash
+export SINGULARITY=/kuhpc/work/biostat/sw/tools_softwares/images
+```
+
+You can then reference any shared image using just its folder name:
+
+``` bash
+singularity shell $SINGULARITY/name-of-image/image.sif
+```
+
+::: callout-warning
+## This must be done each new login or node
+
+Whether you are logging in again or entering a new node for a submitted job, it is necessary to again export `$SINGULARITY` each time. Otherwise, you will need to use the full path. If you are seeing errors like "no such file or directory," it is always worth checking whether `$SINGULARITY` is set by running `echo $SINGULARITY`.
+:::
+
+### Setting `$SINGULARITY` permanently
+
+Rather than running the export command each time, users are encouraged to set this variable permanently in their `.bashrc` profile file. For more information about this type of file, here is a [general overview of the file type](https://www.marquette.edu/high-performance-computing/bashrc.php).
+
+Users **only have to do this process one time**. To add this variable to your `.bashrc`, run the following:
+
+``` bash
+nano ~/.bashrc
+```
+
+which will open the file to edit. You will then paste the following in the file:
+
+``` bash
+export SINGULARITY=/kuhpc/work/biostat/sw/tools_softwares/images
+```
+
+and then close and save the file. If you run `cat ~/.bashrc` you should see the line that you added. This means that you have successfully added this variable. For this one session, you will need to reload the file to apply the change using `source ~/.bashrc` or by reopening the terminal. After this, it will automatically be set each time you log in.
+
+::: callout-warning
+## Important note for submitted jobs
+
+If you set the variable in your `.bashrc` file, you must source that file in any submitted shell script so the job inherits your environment. A submitted job would look something like this:
+
+``` bash
+#!/bin/bash
+#SBATCH --job-name=my_job
+#SBATCH --output=my_job_%j.out
+#SBATCH --error=my_job_%j.err
+#SBATCH --time=01:00:00
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+
+source ~/.bashrc # this line ensures that the node can access the $SINGULARITY variable
+
+singularity exec $SINGULARITY/name-of-image/image.sif your_command
+```
+
+Notice that `source ~/.bashrc` is called first to load your saved environment variables, including `$SINGULARITY`, before calling `singularity`.
+:::
+
+## Checking the image's `README` file
+
+Each image folder in `$SINGULARITY` includes a `README` file with details specific to that image, such as the exact image filename and version, what tools and versions it contains, and any example commands or bind paths needed to run it correctly.
+
+::: callout-tip
+## Always check the `README` first
+
+Before running an image, look at the `README` file in that image's folder:
+
+``` bash
+cat $SINGULARITY/name-of-image/README
+```
+
+The commands below are general templates. The `README` for the specific image you are using may include additional flags, bind paths, or usage notes that you will need.
+:::
+
+## Running an image interactively
+
+To work inside an image interactively, usually to explore its installed tools or test a command, use `singularity shell` to open a shell session inside the container:
+
+``` bash
+singularity shell $SINGULARITY/name-of-image/image.sif
+```
+
+This drops you into a shell running inside the image, with access to everything installed in it. Your current directory and other bind-mounted paths (see the image's `README`) remain accessible inside the container. Type `exit` to leave the container.
+
+## Running an image in a bash script
+
+To run a single command inside an image as part of a submitted job use `singularity exec` followed by the command you want to run:
+
+``` bash
+singularity exec $SINGULARITY/name-of-image/image.sif your_command --with-args
+```
+
+A submitted job that runs a tool from a shared image would look something like this:
+
+``` bash
+#!/bin/bash
+#SBATCH --job-name=image_job
+#SBATCH --output=image_job_%j.out
+#SBATCH --error=image_job_%j.err
+#SBATCH --time=01:00:00
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+
+source ~/.bashrc
+
+singularity exec $SINGULARITY/name-of-image/image.sif your_command --with-args
+```
+
+Notice that the job sources `~/.bashrc` first so that `$SINGULARITY` is set, and then calls `singularity exec` with the specific command to run inside the container.
+
+The `your_command` portion may be a specific script you want to run or a single command from the image.

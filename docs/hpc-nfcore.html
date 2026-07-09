@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Using Shared Singularity Images in the HPC – Bioinformatics</title>
+<title>Using nf-core Pipelines in the HPC – Bioinformatics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -183,14 +183,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setting-up-the-singularity-environment-variable" id="toc-setting-up-the-singularity-environment-variable" class="nav-link active" data-scroll-target="#setting-up-the-singularity-environment-variable">Setting up the <code>$SINGULARITY</code> environment variable</a>
-  <ul class="collapse">
-  <li><a href="#setting-singularity-within-the-current-environment" id="toc-setting-singularity-within-the-current-environment" class="nav-link" data-scroll-target="#setting-singularity-within-the-current-environment">Setting <code>$SINGULARITY</code> within the current environment</a></li>
-  <li><a href="#setting-singularity-permanently" id="toc-setting-singularity-permanently" class="nav-link" data-scroll-target="#setting-singularity-permanently">Setting <code>$SINGULARITY</code> permanently</a></li>
-  </ul></li>
-  <li><a href="#checking-the-images-readme-file" id="toc-checking-the-images-readme-file" class="nav-link" data-scroll-target="#checking-the-images-readme-file">Checking the image’s <code>README</code> file</a></li>
-  <li><a href="#running-an-image-interactively" id="toc-running-an-image-interactively" class="nav-link" data-scroll-target="#running-an-image-interactively">Running an image interactively</a></li>
-  <li><a href="#running-an-image-in-a-bash-script" id="toc-running-an-image-in-a-bash-script" class="nav-link" data-scroll-target="#running-an-image-in-a-bash-script">Running an image in a bash script</a></li>
+  <li><a href="#using-the-shared-ku_crc.config-file" id="toc-using-the-shared-ku_crc.config-file" class="nav-link active" data-scroll-target="#using-the-shared-ku_crc.config-file">Using the shared <code>ku_crc.config</code> file</a></li>
+  <li><a href="#submitting-nf-core-pipeline-jobs" id="toc-submitting-nf-core-pipeline-jobs" class="nav-link" data-scroll-target="#submitting-nf-core-pipeline-jobs">Submitting <code>nf-core</code> pipeline jobs</a></li>
   </ul>
 </nav>
     </div>
@@ -199,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Using Shared Singularity Images in the HPC</h1>
+<h1 class="title">Using <code>nf-core</code> Pipelines in the HPC</h1>
 </div>
 
 
@@ -216,60 +210,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This page details using shared Singularity images in the <code>biostat</code> partition of the KUHPC.</p>
-<p>For more information and an introduction to Singularity/Apptainer, see the following resources:</p>
-<ul>
-<li><p><a href="https://medium.com/@stefan.paladuta17/introduction-to-containerization-a-beginners-walkthrough-f5dc2508e16f#9209">An introduction to images and containerization</a></p></li>
-<li><p><a href="https://apptainer.org/user-docs/3.8/introduction.html">An introduction to Singularity/Apptainer</a></p></li>
-<li><p><a href="https://apptainer.org/user-docs/3.8/build_a_container.html">How to build your own images</a></p></li>
-</ul>
-<section id="setting-up-the-singularity-environment-variable" class="level2">
-<h2 class="anchored" data-anchor-id="setting-up-the-singularity-environment-variable">Setting up the <code>$SINGULARITY</code> environment variable</h2>
-<p>The <code>biostat</code> partition maintains a set of shared Singularity images located at <code>/kuhpc/work/biostat/sw/tools_softwares/images</code> that are used for common bioinformatic pipelines and data types. Rather than typing the full path every time you want to use a shared image, we encourage users to set a <code>$SINGULARITY</code> environment variable that points to that directory. This lets you reference any shared image with a short, readable command like:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> shell <span class="va">$SINGULARITY</span>/name-of-image/image.sif</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>To see what shared images are available, visit the <a href="./hpc-shared-resources.html">Shared Resources</a> page.</p>
+<p>This page details running <code>nf-core</code> pipelines in the <code>biostat</code> partition of the KUHPC using the shared Nextflow configuration file.</p>
+<p>nf-core is a global community of people that collaborate to build open-source Nextflow pipelines. They have pipelines for many common bioinformatics data analyses. For more information about the nf-core community and the curated pipelines available, please visit <a href="https://nf-co.re/">their documentation</a>. If you have questions about using a pipeline, you are encouraged to connect directly to the team that maintains the specific pipeline you are using via their Slack, which you can request to join on <a href="https://nf-co.re/join">this page</a>.</p>
+<section id="using-the-shared-ku_crc.config-file" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-shared-ku_crc.config-file">Using the shared <code>ku_crc.config</code> file</h2>
+<p>In order to have the Nextflow pipeline properly run on our HPC system, users need to use a configuration file, or config file, specifically created to the properties of our HPC. Rather than have every user create their own, the <code>biostat</code> partition maintains a shared Nextflow config file located at <code>/kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config</code>. This file configures Nextflow to submit processes to the SLURM scheduler on the correct partition/account, sets up the shared Singularity container cache and bind paths, and sets sensible default resource requests (CPUs, memory, time) per process. Passing this file with <code>-c</code> when you launch a pipeline means you don’t need to write or maintain your own infrastructure config.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Benefit of shared Singularity images
+<span class="screen-reader-only">Tip</span>Benefit of the shared <code>ku_crc.config</code> file
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Using shared Singularity images means you don’t need to build and maintain your own image for common tools and workflows. This saves setup time, reduces redundant storage use on the partition, and gives you access to a curated set of pre-built, tested images without any build steps.</p>
+<p>Using the shared config means you don’t need to figure out SLURM account/partition settings, container cache directories, or per-process resource defaults yourself. This saves setup time and keeps Singularity images from being re-downloaded by every user.</p>
 </div>
 </div>
-<p>Use one of the two following options to set the <code>$SINGULARITY</code> variable:</p>
-<section id="setting-singularity-within-the-current-environment" class="level3">
-<h3 class="anchored" data-anchor-id="setting-singularity-within-the-current-environment">Setting <code>$SINGULARITY</code> within the current environment</h3>
-<p>To use the shorthand in your current terminal session, run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SINGULARITY</span><span class="op">=</span>/kuhpc/work/biostat/sw/tools_softwares/images</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You can then reference any shared image using just its folder name:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> shell <span class="va">$SINGULARITY</span>/name-of-image/image.sif</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>This must be done each new login or node
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Whether you are logging in again or entering a new node for a submitted job, it is necessary to again export <code>$SINGULARITY</code> each time. Otherwise, you will need to use the full path. If you are seeing errors like “no such file or directory,” it is always worth checking whether <code>$SINGULARITY</code> is set by running <code>echo $SINGULARITY</code>.</p>
-</div>
-</div>
+<p>To run an <code>nf-core</code> pipeline with the shared config, first load Nextflow:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load nextflow</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then run your pipeline, passing the shared config with <code>-c</code>. No <code>-profile</code> is needed since <code>ku_crc.config</code> already configures the executor and container settings:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/<span class="op">&lt;</span>pipeline<span class="op">&gt;</span> -c /kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="setting-singularity-permanently" class="level3">
-<h3 class="anchored" data-anchor-id="setting-singularity-permanently">Setting <code>$SINGULARITY</code> permanently</h3>
-<p>Rather than running the export command each time, users are encouraged to set this variable permanently in their <code>.bashrc</code> profile file. For more information about this type of file, here is a <a href="https://www.marquette.edu/high-performance-computing/bashrc.php">general overview of the file type</a>.</p>
-<p>Users <strong>only have to do this process one time</strong>. To add this variable to your <code>.bashrc</code>, run the following:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.bashrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>which will open the file to edit. You will then paste the following in the file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SINGULARITY</span><span class="op">=</span>/kuhpc/work/biostat/sw/tools_softwares/images</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>and then close and save the file. If you run <code>cat ~/.bashrc</code> you should see the line that you added. This means that you have successfully added this variable. For this one session, you will need to reload the file to apply the change using <code>source ~/.bashrc</code> or by reopening the terminal. After this, it will automatically be set each time you log in.</p>
+<section id="submitting-nf-core-pipeline-jobs" class="level2">
+<h2 class="anchored" data-anchor-id="submitting-nf-core-pipeline-jobs">Submitting <code>nf-core</code> pipeline jobs</h2>
+<p><code>nf-core</code> pipelines are typically launched from a submitted job whose only responsibility is to run the head Nextflow process. Nextflow itself then submits each pipeline step as its own SLURM job using the executor settings from <code>ku_crc.config</code>. A submitted job to run an nf-core pipeline would look something like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=nfcore_pipeline</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=nfcore_pipeline_%j.out</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=nfcore_pipeline_%j.err</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=24:00:00</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=1</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=4G</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load nextflow</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/<span class="op">&lt;</span>pipeline<span class="op">&gt;</span> -c /kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -280,68 +260,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you set the variable in your <code>.bashrc</code> file, you must source that file in any submitted shell script so the job inherits your environment. A submitted job would look something like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=my_job</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=my_job_%j.out</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=my_job_%j.err</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=01:00:00</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=8G</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc <span class="co"># this line ensures that the node can access the $SINGULARITY variable</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="va">$SINGULARITY</span>/name-of-image/image.sif your_command</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Notice that <code>source ~/.bashrc</code> is called first to load your saved environment variables, including <code>$SINGULARITY</code>, before calling <code>singularity</code>.</p>
+<p>Submitted jobs must <code>source ~/.bashrc</code> before calling <code>module load nextflow</code>. Without it, the module system will not be initialized in the job’s shell and <code>module load</code> will fail, even if it works fine when you run it interactively. This allows the submitted job to have access to the variables such as <code>$WORK</code> and <code>$HOME</code> that are associated with your account.</p>
 </div>
 </div>
-</section>
-</section>
-<section id="checking-the-images-readme-file" class="level2">
-<h2 class="anchored" data-anchor-id="checking-the-images-readme-file">Checking the image’s <code>README</code> file</h2>
-<p>Each image folder in <code>$SINGULARITY</code> includes a <code>README</code> file with details specific to that image, such as the exact image filename and version, what tools and versions it contains, and any example commands or bind paths needed to run it correctly.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Always check the <code>README</code> first
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Before running an image, look at the <code>README</code> file in that image’s folder:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="va">$SINGULARITY</span>/name-of-image/README</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The commands below are general templates. The <code>README</code> for the specific image you are using may include additional flags, bind paths, or usage notes that you will need.</p>
-</div>
-</div>
-</section>
-<section id="running-an-image-interactively" class="level2">
-<h2 class="anchored" data-anchor-id="running-an-image-interactively">Running an image interactively</h2>
-<p>To work inside an image interactively, usually to explore its installed tools or test a command, use <code>singularity shell</code> to open a shell session inside the container:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> shell <span class="va">$SINGULARITY</span>/name-of-image/image.sif</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This drops you into a shell running inside the image, with access to everything installed in it. Your current directory and other bind-mounted paths (see the image’s <code>README</code>) remain accessible inside the container. Type <code>exit</code> to leave the container.</p>
-</section>
-<section id="running-an-image-in-a-bash-script" class="level2">
-<h2 class="anchored" data-anchor-id="running-an-image-in-a-bash-script">Running an image in a bash script</h2>
-<p>To run a single command inside an image as part of a submitted job use <code>singularity exec</code> followed by the command you want to run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="va">$SINGULARITY</span>/name-of-image/image.sif your_command <span class="at">--with-args</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>A submitted job that runs a tool from a shared image would look something like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=image_job</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=image_job_%j.out</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=image_job_%j.err</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=01:00:00</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=8G</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="va">$SINGULARITY</span>/name-of-image/image.sif your_command <span class="at">--with-args</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Notice that the job sources <code>~/.bashrc</code> first so that <code>$SINGULARITY</code> is set, and then calls <code>singularity exec</code> with the specific command to run inside the container.</p>
-<p>The <code>your_command</code> portion may be a specific script you want to run or a single command from the image.</p>
 
 
 </section>

@@ -1,0 +1,56 @@
+---
+title: "Using `nf-core` Pipelines in the HPC"
+---
+
+This page details running `nf-core` pipelines in the `biostat` partition of the KUHPC using the shared Nextflow configuration file.
+
+nf-core is a global community of people that collaborate to build open-source Nextflow pipelines. They have pipelines for many common bioinformatics data analyses. For more information about the nf-core community and the curated pipelines available, please visit [their documentation](https://nf-co.re/). If you have questions about using a pipeline, you are encouraged to connect directly to the team that maintains the specific pipeline you are using via their Slack, which you can request to join on [this page](https://nf-co.re/join).
+
+## Using the shared `ku_crc.config` file
+
+In order to have the Nextflow pipeline properly run on our HPC system, users need to use a configuration file, or config file, specifically created to the properties of our HPC. Rather than have every user create their own, the `biostat` partition maintains a shared Nextflow config file located at `/kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config`. This file configures Nextflow to submit processes to the SLURM scheduler on the correct partition/account, sets up the shared Singularity container cache and bind paths, and sets sensible default resource requests (CPUs, memory, time) per process. Passing this file with `-c` when you launch a pipeline means you don't need to write or maintain your own infrastructure config.
+
+::: callout-tip
+## Benefit of the shared `ku_crc.config` file
+
+Using the shared config means you don't need to figure out SLURM account/partition settings, container cache directories, or per-process resource defaults yourself. This saves setup time and keeps Singularity images from being re-downloaded by every user.
+:::
+
+To run an `nf-core` pipeline with the shared config, first load Nextflow:
+
+``` bash
+module load nextflow
+```
+
+Then run your pipeline, passing the shared config with `-c`. No `-profile` is needed since `ku_crc.config` already configures the executor and container settings:
+
+``` bash
+nextflow run nf-core/<pipeline> -c /kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config
+```
+
+## Submitting `nf-core` pipeline jobs
+
+`nf-core` pipelines are typically launched from a submitted job whose only responsibility is to run the head Nextflow process. Nextflow itself then submits each pipeline step as its own SLURM job using the executor settings from `ku_crc.config`. A submitted job to run an nf-core pipeline would look something like this:
+
+``` bash
+#!/bin/bash
+#SBATCH --job-name=nfcore_pipeline
+#SBATCH --output=nfcore_pipeline_%j.out
+#SBATCH --error=nfcore_pipeline_%j.err
+#SBATCH --time=24:00:00
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4G
+
+source ~/.bashrc
+
+module load nextflow
+
+nextflow run nf-core/<pipeline> -c /kuhpc/work/biostat/sw/internal_pipelines/nextflow/ku_crc.config
+```
+
+::: callout-warning
+## Important note for submitted jobs
+
+Submitted jobs must `source ~/.bashrc` before calling `module load nextflow`. Without it, the module system will not be initialized in the job's shell and `module load` will fail, even if it works fine when you run it interactively. This allows the submitted job to have access to the variables such as `$WORK` and `$HOME` that are associated with your account.
+:::
