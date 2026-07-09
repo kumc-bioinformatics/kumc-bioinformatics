@@ -60,14 +60,14 @@
     "href": "hpc-images.html",
     "title": "Using Shared Singularity Images in the HPC",
     "section": "",
-    "text": "This page details using shared Singularity images in the biostat partition of the KUHPC."
+    "text": "This page details using shared Singularity images in the biostat partition of the KUHPC.\nFor more information and an introduction to Singularity/Apptainer, see the following resources:"
   },
   {
     "objectID": "hpc-images.html#setting-up-the-singularity-environment-variable",
     "href": "hpc-images.html#setting-up-the-singularity-environment-variable",
     "title": "Using Shared Singularity Images in the HPC",
     "section": "Setting up the $SINGULARITY environment variable",
-    "text": "Setting up the $SINGULARITY environment variable"
+    "text": "Setting up the $SINGULARITY environment variable\nThe biostat partition maintains a set of shared Singularity images located at /kuhpc/work/biostat/sw/tools_softwares/images that are used for common bioinformatic pipelines and data types. Rather than typing the full path every time you want to use a shared image, we encourage users to set a $SINGULARITY environment variable that points to that directory. This lets you reference any shared image with a short, readable command like:\nsingularity shell $SINGULARITY/name-of-image/image.sif\nTo see what shared images are available, visit the Shared Resources page.\n\n\n\n\n\n\nTipBenefit of shared Singularity images\n\n\n\nUsing shared Singularity images means you don’t need to build and maintain your own image for common tools and workflows. This saves setup time, reduces redundant storage use on the partition, and gives you access to a curated set of pre-built, tested images without any build steps.\n\n\nUse one of the two following options to set the $SINGULARITY variable:\n\nSetting $SINGULARITY within the current environment\nTo use the shorthand in your current terminal session, run:\nexport SINGULARITY=/kuhpc/work/biostat/sw/tools_softwares/images\nYou can then reference any shared image using just its folder name:\nsingularity shell $SINGULARITY/name-of-image/image.sif\n\n\n\n\n\n\nWarningThis must be done each new login or node\n\n\n\nWhether you are logging in again or entering a new node for a submitted job, it is necessary to again export $SINGULARITY each time. Otherwise, you will need to use the full path. If you are seeing errors like “no such file or directory,” it is always worth checking whether $SINGULARITY is set by running echo $SINGULARITY.\n\n\n\n\nSetting $SINGULARITY permanently\nRather than running the export command each time, users are encouraged to set this variable permanently in their .bashrc profile file. For more information about this type of file, here is a general overview of the file type.\nUsers only have to do this process one time. To add this variable to your .bashrc, run the following:\nnano ~/.bashrc\nwhich will open the file to edit. You will then paste the following in the file:\nexport SINGULARITY=/kuhpc/work/biostat/sw/tools_softwares/images\nand then close and save the file. If you run cat ~/.bashrc you should see the line that you added. This means that you have successfully added this variable. For this one session, you will need to reload the file to apply the change using source ~/.bashrc or by reopening the terminal. After this, it will automatically be set each time you log in.\n\n\n\n\n\n\nWarningImportant note for submitted jobs\n\n\n\nIf you set the variable in your .bashrc file, you must source that file in any submitted shell script so the job inherits your environment. A submitted job would look something like this:\n#!/bin/bash\n#SBATCH --job-name=my_job\n#SBATCH --output=my_job_%j.out\n#SBATCH --error=my_job_%j.err\n#SBATCH --time=01:00:00\n#SBATCH --ntasks=1\n#SBATCH --cpus-per-task=4\n#SBATCH --mem=8G\n\nsource ~/.bashrc # this line ensures that the node can access the $SINGULARITY variable\n\nsingularity exec $SINGULARITY/name-of-image/image.sif your_command\nNotice that source ~/.bashrc is called first to load your saved environment variables, including $SINGULARITY, before calling singularity."
   },
   {
     "objectID": "hpc-R.html",
@@ -103,5 +103,26 @@
     "title": "Bioinformatics",
     "section": "Questions or Requests?",
     "text": "Questions or Requests?\nSubmit an issue on GitHub to request new resources or report problems.\n\n\n\n\n\n\nNoteAcknowledgements\n\n\n\nThe biostat HPC resource is funded by the K-INBRE Data Science Core that is supported in part by the National Institute of General Medical Science award (P20 GM103418), the Biostatistics and Informatics Shared Resource, supported by the National Cancer Institute Cancer Center Support Grant (P30 CA168524), and the Kansas Institute for Precision Medicine COBRE, supported by the National Institute of General Medical Science award P20 GM130423."
+  },
+  {
+    "objectID": "hpc-images.html#checking-the-images-readme-file",
+    "href": "hpc-images.html#checking-the-images-readme-file",
+    "title": "Using Shared Singularity Images in the HPC",
+    "section": "Checking the image’s README file",
+    "text": "Checking the image’s README file\nEach image folder in $SINGULARITY includes a README file with details specific to that image, such as the exact image filename and version, what tools and versions it contains, and any example commands or bind paths needed to run it correctly.\n\n\n\n\n\n\nTipAlways check the README first\n\n\n\nBefore running an image, look at the README file in that image’s folder:\ncat $SINGULARITY/name-of-image/README\nThe commands below are general templates. The README for the specific image you are using may include additional flags, bind paths, or usage notes that you will need."
+  },
+  {
+    "objectID": "hpc-images.html#running-an-image-interactively",
+    "href": "hpc-images.html#running-an-image-interactively",
+    "title": "Using Shared Singularity Images in the HPC",
+    "section": "Running an image interactively",
+    "text": "Running an image interactively\nTo work inside an image interactively, usually to explore its installed tools or test a command, use singularity shell to open a shell session inside the container:\nsingularity shell $SINGULARITY/name-of-image/image.sif\nThis drops you into a shell running inside the image, with access to everything installed in it. Your current directory and other bind-mounted paths (see the image’s README) remain accessible inside the container. Type exit to leave the container."
+  },
+  {
+    "objectID": "hpc-images.html#running-an-image-in-a-bash-script",
+    "href": "hpc-images.html#running-an-image-in-a-bash-script",
+    "title": "Using Shared Singularity Images in the HPC",
+    "section": "Running an image in a bash script",
+    "text": "Running an image in a bash script\nTo run a single command inside an image as part of a submitted job use singularity exec followed by the command you want to run:\nsingularity exec $SINGULARITY/name-of-image/image.sif your_command --with-args\nA submitted job that runs a tool from a shared image would look something like this:\n#!/bin/bash\n#SBATCH --job-name=image_job\n#SBATCH --output=image_job_%j.out\n#SBATCH --error=image_job_%j.err\n#SBATCH --time=01:00:00\n#SBATCH --ntasks=1\n#SBATCH --cpus-per-task=4\n#SBATCH --mem=8G\n\nsource ~/.bashrc\n\nsingularity exec $SINGULARITY/name-of-image/image.sif your_command --with-args\nNotice that the job sources ~/.bashrc first so that $SINGULARITY is set, and then calls singularity exec with the specific command to run inside the container.\nThe your_command portion may be a specific script you want to run or a single command from the image."
   }
 ]
