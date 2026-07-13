@@ -14,6 +14,8 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - href: get-access-to-biostat.qmd
+        text: Get Access to Biostat
       - text: How To
         menu:
           - href: hpc-R.qmd
@@ -28,6 +30,10 @@ website:
         text: Shared Resources
       - href: best-practices.qmd
         text: Best Practices & Common Pitfalls
+      - text: Resources
+        menu:
+          - href: terms-of-agreement.qmd
+            text: Terms of Agreement
     right:
       - icon: github
         href: https://github.com/kumc-bioinformatics/kumc-bioinformatics

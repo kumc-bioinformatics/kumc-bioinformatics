@@ -1,0 +1,44 @@
+# Steps for obtaining access to the HPC cluster
+
+*Last updated 02/28/2023*
+
+## Step 1: Obtain KU ID
+
+::: callout-warning
+## The KU ID and KUMC ID are different.
+
+You will need to make sure you have a KU ID to be able to login to the HPC.
+
+-   If you already have a KU ID, skip to Step 2.
+-   If you don't, apply for your KU ID here: <https://myidentity.ku.edu/setup/login>
+:::
+
+## Step 2: Request Access to Join the KU Community Cluster through the Center for Research Computing
+
+-   Fill out the form here, logging in using your KU credentials: <https://deptsec.ku.edu/~crc/forms/form/2>
+-   **Cluster** question: if you are requesting access for the short-term storage and analysis of research identifiable data (RIN), select "Hawk"; otherwise select "KU Community Cluster" (the correct choice for most people).
+-   **Owner group** question: select "biostatistics" regardless of your answer to the Cluster question.
+-   If you have questions about which group is appropriate for your needs, contact Drs. Dong Pei, Devin Koestler, and/or Jeffrey Thompson.
+
+## Step 3: Approval and Terms of Agreement
+
+-   Once the form has been submitted, the group managers listed at the bottom of the page will be contacted by the KU HPC to approve the request.
+-   Before being granted approval, users must sign and date a [Terms of Agreement](terms-of-agreement.qmd) stating that they agree to abide by the policies and procedures of both the Center for Research Computing and the policies and best practices for the "biostatistics" or "biostat_RIN" membership groups.
+-   The [Terms of Agreement](terms-of-agreement.qmd) will be emailed to requesting users by the group managers for "biostatistics" or "biostat_RIN".
+-   Please make sure you read the [Terms of Agreement](terms-of-agreement.qmd) document.
+
+## Step 4: Instructional video and tutorials for getting started
+
+-   Upon receipt of the signed [Terms of Agreement](terms-of-agreement.qmd), approval will be granted and users will be able to log in to the HPC and use the resources of their respective ownership group.
+-   Instructions on how to log in, run interactive jobs, run batch jobs, and a summary of best practices are covered in an instructional video, emailed to users after the approval process.
+-   For guidance on submitting and structuring jobs on the `biostat` partition, see [Best Practices & Common Pitfalls](best-practices.qmd).
+-   For shared software, conda environments, and reference genomes available once you have access, see [Shared Resources](hpc-shared-resources.qmd), [Using Conda](using-conda.qmd), and [R on HPC](hpc-R.qmd).
+-   When logging into the cluster, use the following commands:
+    -   `ssh hpc.crc.ku.edu` : log into the KU Community Cluster
+    -   `ssh hawk.crc.ku.edu` : log into Hawk for the storage and analysis of research identifiable data (e.g., biostat_RIN)
+
+## For Questions, Contact:
+
+-   Devin Koestler, Ph.D. (co-Manager of "biostatistics"), Email: dkoestler\@kumc.edu
+-   Dong Pei, Ph.D. (co-Manager of "biostatistics"), Email: dpei\@kumc.edu
+-   Jeffrey Thompson, Ph.D. (co-Manager of "biostat_RIN"), Email: jthompson21\@kumc.ed

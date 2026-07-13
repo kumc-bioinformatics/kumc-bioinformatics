@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Using Shared Singularity Images in the HPC – Bioinformatics</title>
+<title>terms-of-agreement – Bioinformatics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -200,167 +165,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setting-up-the-singularity-environment-variable" id="toc-setting-up-the-singularity-environment-variable" class="nav-link active" data-scroll-target="#setting-up-the-singularity-environment-variable">Setting up the <code>$SINGULARITY</code> environment variable</a>
+  <li><a href="#terms-of-agreement" id="toc-terms-of-agreement" class="nav-link active" data-scroll-target="#terms-of-agreement">Terms of Agreement</a>
   <ul class="collapse">
-  <li><a href="#setting-singularity-within-the-current-environment" id="toc-setting-singularity-within-the-current-environment" class="nav-link" data-scroll-target="#setting-singularity-within-the-current-environment">Setting <code>$SINGULARITY</code> within the current environment</a></li>
-  <li><a href="#setting-singularity-permanently" id="toc-setting-singularity-permanently" class="nav-link" data-scroll-target="#setting-singularity-permanently">Setting <code>$SINGULARITY</code> permanently</a></li>
+  <li><a href="#six-hour" id="toc-six-hour" class="nav-link" data-scroll-target="#six-hour">SIX HOUR</a></li>
+  <li><a href="#proper-node-usage" id="toc-proper-node-usage" class="nav-link" data-scroll-target="#proper-node-usage">PROPER NODE USAGE</a></li>
+  <li><a href="#cluster-storage-backup" id="toc-cluster-storage-backup" class="nav-link" data-scroll-target="#cluster-storage-backup">CLUSTER STORAGE BACKUP</a></li>
+  <li><a href="#scratch-space" id="toc-scratch-space" class="nav-link" data-scroll-target="#scratch-space">SCRATCH SPACE</a></li>
+  <li><a href="#data-classification-and-handling-policy" id="toc-data-classification-and-handling-policy" class="nav-link" data-scroll-target="#data-classification-and-handling-policy">DATA CLASSIFICATION AND HANDLING POLICY</a></li>
   </ul></li>
-  <li><a href="#checking-the-images-readme-file" id="toc-checking-the-images-readme-file" class="nav-link" data-scroll-target="#checking-the-images-readme-file">Checking the image’s <code>README</code> file</a></li>
-  <li><a href="#running-an-image-interactively" id="toc-running-an-image-interactively" class="nav-link" data-scroll-target="#running-an-image-interactively">Running an image interactively</a></li>
-  <li><a href="#running-an-image-in-a-bash-script" id="toc-running-an-image-in-a-bash-script" class="nav-link" data-scroll-target="#running-an-image-in-a-bash-script">Running an image in a bash script</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Using Shared Singularity Images in the HPC</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>This page details using shared Singularity images in the <code>biostat</code> partition of the KUHPC.</p>
-<p>For more information and an introduction to Singularity/Apptainer, see the following resources:</p>
-<ul>
-<li><p><a href="https://medium.com/@stefan.paladuta17/introduction-to-containerization-a-beginners-walkthrough-f5dc2508e16f#9209">An introduction to images and containerization</a></p></li>
-<li><p><a href="https://apptainer.org/user-docs/3.8/introduction.html">An introduction to Singularity/Apptainer</a></p></li>
-<li><p><a href="https://apptainer.org/user-docs/3.8/build_a_container.html">How to build your own images</a></p></li>
-</ul>
-<section id="setting-up-the-singularity-environment-variable" class="level2">
-<h2 class="anchored" data-anchor-id="setting-up-the-singularity-environment-variable">Setting up the <code>$SINGULARITY</code> environment variable</h2>
-<p>The <code>biostat</code> partition maintains a set of shared Singularity images located at <code>/kuhpc/work/biostat/sw/tools_softwares/images</code> that are used for common bioinformatic pipelines and data types. Rather than typing the full path every time you want to use a shared image, we encourage users to set a <code>$SINGULARITY</code> environment variable that points to that directory. This lets you reference any shared image with a short, readable command like:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> shell <span class="va">$SINGULARITY</span>/name-of-image/image.sif</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>To see what shared images are available, visit the <a href="./hpc-shared-resources.html">Shared Resources</a> page.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Benefit of shared Singularity images
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Using shared Singularity images means you don’t need to build and maintain your own image for common tools and workflows. This saves setup time, reduces redundant storage use on the partition, and gives you access to a curated set of pre-built, tested images without any build steps.</p>
-</div>
-</div>
-<p>Use one of the two following options to set the <code>$SINGULARITY</code> variable:</p>
-<section id="setting-singularity-within-the-current-environment" class="level3">
-<h3 class="anchored" data-anchor-id="setting-singularity-within-the-current-environment">Setting <code>$SINGULARITY</code> within the current environment</h3>
-<p>To use the shorthand in your current terminal session, run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SINGULARITY</span><span class="op">=</span>/kuhpc/work/biostat/sw/tools_softwares/images</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You can then reference any shared image using just its folder name:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> shell <span class="va">$SINGULARITY</span>/name-of-image/image.sif</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>This must be done each new login or node
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Whether you are logging in again or entering a new node for a submitted job, it is necessary to again export <code>$SINGULARITY</code> each time. Otherwise, you will need to use the full path. If you are seeing errors like “no such file or directory,” it is always worth checking whether <code>$SINGULARITY</code> is set by running <code>echo $SINGULARITY</code>.</p>
-</div>
-</div>
+<section id="terms-of-agreement" class="level1">
+<h1>Terms of Agreement</h1>
+<p><em>Terms of Agreement for membership in the “biostat” group for access to the KU Community Cluster</em></p>
+<p><em>Updated on November 30th 2020</em></p>
+<p>All users must agree to follow the policies and procedures for KU Community Cluster Users, as put forth by the KU Center for Research Computing (<a href="https://crc.ku.edu/hpc/policies)" class="uri">https://crc.ku.edu/hpc/policies)</a> and summarized below.</p>
+<section id="six-hour" class="level2">
+<h2 class="anchored" data-anchor-id="six-hour">SIX HOUR</h2>
+<p>If the hardware allocated to any given research group should prove insufficient to the needs of a researcher within that group, there exists a “sixhour” partition containing all compute resources that are part of the KU Community Cluster. Any user is allowed to run jobs in this queue, provided that their job does not run for more than six hours at one time. The Center for Research Computing asks that all users be good stewards of this partition, if the resources within the user’s host partition can fit their needs then please use that partition. If it is found that this resource is being abused to the detriment of other users, access can be revoked to the “sixhour” partition at the discretion of the Center for Research computing.</p>
 </section>
-<section id="setting-singularity-permanently" class="level3">
-<h3 class="anchored" data-anchor-id="setting-singularity-permanently">Setting <code>$SINGULARITY</code> permanently</h3>
-<p>Rather than running the export command each time, users are encouraged to set this variable permanently in their <code>.bashrc</code> profile file. For more information about this type of file, here is a <a href="https://www.marquette.edu/high-performance-computing/bashrc.php">general overview of the file type</a>.</p>
-<p>Users <strong>only have to do this process one time</strong>. To add this variable to your <code>.bashrc</code>, run the following:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> ~/.bashrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>which will open the file to edit. You will then paste the following in the file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SINGULARITY</span><span class="op">=</span>/kuhpc/work/biostat/sw/tools_softwares/images</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>and then close and save the file. If you run <code>cat ~/.bashrc</code> you should see the line that you added. This means that you have successfully added this variable. For this one session, you will need to reload the file to apply the change using <code>source ~/.bashrc</code> or by reopening the terminal. After this, it will automatically be set each time you log in.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Important note for submitted jobs
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you set the variable in your <code>.bashrc</code> file, you must source that file in any submitted shell script so the job inherits your environment. A submitted job would look something like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=my_job</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=my_job_%j.out</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=my_job_%j.err</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=01:00:00</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=8G</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc <span class="co"># this line ensures that the node can access the $SINGULARITY variable</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="va">$SINGULARITY</span>/name-of-image/image.sif your_command</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Notice that <code>source ~/.bashrc</code> is called first to load your saved environment variables, including <code>$SINGULARITY</code>, before calling <code>singularity</code>.</p>
-</div>
-</div>
+<section id="proper-node-usage" class="level2">
+<h2 class="anchored" data-anchor-id="proper-node-usage">PROPER NODE USAGE</h2>
+<p>The cluster is comprised of two login nodes, several compute nodes, and administrative nodes. Users are to submit their computationally intensive executable jobs to the compute nodes only. Login nodes are to be used only for small tasks such as word processing, viewing job results, etc. Processes that are ran on the login nodes are given only 60 minutes of CPU time. Any process using more than 60 minutes of CPU time will be killed automatically. The login nodes are the shared gateway to the cluster for all users. Any user found to be running CPU or memory intensive executables on these login nodes or any other node that is not a compute node, the user’s processes will be cancelled and the user warned through email. Any subsequent offense and the user may have their access revoked at the discretion of the Center for Research Computing. If it is necessary to have an active shell to view live results of an executable, please run an interactive job.</p>
 </section>
+<section id="cluster-storage-backup" class="level2">
+<h2 class="anchored" data-anchor-id="cluster-storage-backup">CLUSTER STORAGE BACKUP</h2>
+<p>No backups are done on any file system on the KU Community Cluster. Users are responsible for their own backups, the Center for Research Computing will not create any automatic backups for any user and is not responsible for the deletion or loss of any files from the cluster file system.</p>
 </section>
-<section id="checking-the-images-readme-file" class="level2">
-<h2 class="anchored" data-anchor-id="checking-the-images-readme-file">Checking the image’s <code>README</code> file</h2>
-<p>Each image folder in <code>$SINGULARITY</code> includes a <code>README</code> file with details specific to that image, such as the exact image filename and version, what tools and versions it contains, and any example commands or bind paths needed to run it correctly.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Always check the <code>README</code> first
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Before running an image, look at the <code>README</code> file in that image’s folder:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="va">$SINGULARITY</span>/name-of-image/README</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The commands below are general templates. The <code>README</code> for the specific image you are using may include additional flags, bind paths, or usage notes that you will need.</p>
-</div>
-</div>
+<section id="scratch-space" class="level2">
+<h2 class="anchored" data-anchor-id="scratch-space">SCRATCH SPACE</h2>
+<p>The scratch space on the cluster file system is open to all users of the cluster with no space limitations other than the physical limitations of available hard drive space. To keep this shared space clean and available for all users, any file found to be more than 60 days old on the scratch segment of the file system will be automatically deleted. Any user found trying to bypass this will be warned and any subsequent offenses may result in the user’s access being revoked. The scratch space is short term storage for immediate use in computation. Any files that need to be kept longer should be kept in a user’s $HOME, $WORK, or another storage medium.</p>
 </section>
-<section id="running-an-image-interactively" class="level2">
-<h2 class="anchored" data-anchor-id="running-an-image-interactively">Running an image interactively</h2>
-<p>To work inside an image interactively, usually to explore its installed tools or test a command, use <code>singularity shell</code> to open a shell session inside the container:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> shell <span class="va">$SINGULARITY</span>/name-of-image/image.sif</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This drops you into a shell running inside the image, with access to everything installed in it. Your current directory and other bind-mounted paths (see the image’s <code>README</code>) remain accessible inside the container. Type <code>exit</code> to leave the container.</p>
-</section>
-<section id="running-an-image-in-a-bash-script" class="level2">
-<h2 class="anchored" data-anchor-id="running-an-image-in-a-bash-script">Running an image in a bash script</h2>
-<p>To run a single command inside an image as part of a submitted job use <code>singularity exec</code> followed by the command you want to run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="va">$SINGULARITY</span>/name-of-image/image.sif your_command <span class="at">--with-args</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>A submitted job that runs a tool from a shared image would look something like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=image_job</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=image_job_%j.out</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=image_job_%j.err</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=01:00:00</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=8G</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="ex">singularity</span> exec <span class="va">$SINGULARITY</span>/name-of-image/image.sif your_command <span class="at">--with-args</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Notice that the job sources <code>~/.bashrc</code> first so that <code>$SINGULARITY</code> is set, and then calls <code>singularity exec</code> with the specific command to run inside the container.</p>
-<p>The <code>your_command</code> portion may be a specific script you want to run or a single command from the image.</p>
+<section id="data-classification-and-handling-policy" class="level2">
+<h2 class="anchored" data-anchor-id="data-classification-and-handling-policy">DATA CLASSIFICATION AND HANDLING POLICY</h2>
+<p>In accordance with the Data Classification Policy set forth by the KU Information Technology department, only data classified as Level III is allowed on the KU Community Cluster. The cluster is not configured to handle any other type of data classification properly. If you are found to have any other data other than Level III data on the KU Community Cluster, your account will immediately be suspended, all your jobs cancelled, and effected files removed.</p>
+<p>In addition to the policies and procedures put forth by the KU Center for Research Computing, users agree to follow the policies and best-practices of the “biostat” group. This includes:</p>
+<p>1. Use of the “sixhour” partition where and when possible to avoid overconsumption of the “biostat” resources.</p>
+<p>2. Each user will be assigned a 1TB space in their $WORK directory. If more storage is needed, please contact Drs. Dong Pei and Devin Koestler.</p>
+<p>3. Under no circumstances will I or anyone affiliated with my team upload sensitive data (e.g., Protected Health Information (PHI), research identifiable data, etc.) to the cluster. If you have further questions about whether your data is appropriate to store/analyze on the cluster, please contact Drs. Dong Pei and Devin Koestler</p>
+<p>4. Not running big jobs on the login1 or login2 nodes. To test code prior to submitting batch jobs, request an interactive job. Instructions on how to do this can be found here (<a href="https://crc.ku.edu/hpc/how-to," class="uri">https://crc.ku.edu/hpc/how-to,</a> see interactive jobs).</p>
+<p>5. Testing code to determine the minimum computing resources need before submitting batch jobs (e.g., number of nodes, number of tasks/cores, amount of RAM, run time, etc.).</p>
+<p>6. Publications or other research output that used HPC resource shall acknowledge the K-INBRE Bioinformatics Core that is supported in part by the National Institute of General Medical Science award (P20 GM103418), the Biostatistics and Informatics Shared Resource, supported by the National Cancer Institute Cancer Center Support Grant (P30 CA168524), and the Kansas Institute for Precision Medicine COBRE, supported by the National Institute of General Medical Science award P20 GM130423.</p>
+<p>7. To conserve resources, account membership with the “biostat” group will be discontinued and all files stored in cluster directories deleted, after three months of position-termination at KUMC. Thus, for graduate student members of the “biostat” group, your membership and directories on the HPC will be wiped after three months post thesis defense (for doctoral students) or three months post-graduation for masters students. Please make arrangements after your defense/graduation to secure whatever data you have on the HPC for later use.</p>
+<p>Users understand that violation of any of the above terms above may result in early termination of membership in the “biostat” group</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
