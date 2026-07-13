@@ -1,0 +1,45 @@
+# Terms of Agreement
+
+*Terms of Agreement for membership in the “biostat” group for access to the KU Community Cluster*
+
+*Updated on November 30th 2020*
+
+All users must agree to follow the policies and procedures for KU Community Cluster Users, as put forth by the KU Center for Research Computing (<https://crc.ku.edu/hpc/policies)> and summarized below.
+
+## SIX HOUR
+
+If the hardware allocated to any given research group should prove insufficient to the needs of a researcher within that group, there exists a "sixhour" partition containing all compute resources that are part of the KU Community Cluster. Any user is allowed to run jobs in this queue, provided that their job does not run for more than six hours at one time. The Center for Research Computing asks that all users be good stewards of this partition, if the resources within the user's host partition can fit their needs then please use that partition. If it is found that this resource is being abused to the detriment of other users, access can be revoked to the "sixhour" partition at the discretion of the Center for Research computing.
+
+## PROPER NODE USAGE
+
+The cluster is comprised of two login nodes, several compute nodes, and administrative nodes. Users are to submit their computationally intensive executable jobs to the compute nodes only. Login nodes are to be used only for small tasks such as word processing, viewing job results, etc. Processes that are ran on the login nodes are given only 60 minutes of CPU time. Any process using more than 60 minutes of CPU time will be killed automatically. The login nodes are the shared gateway to the cluster for all users. Any user found to be running CPU or memory intensive executables on these login nodes or any other node that is not a compute node, the user's processes will be cancelled and the user warned through email. Any subsequent offense and the user may have their access revoked at the discretion of the Center for Research Computing. If it is necessary to have an active shell to view live results of an executable, please run an interactive job.
+
+## CLUSTER STORAGE BACKUP
+
+No backups are done on any file system on the KU Community Cluster. Users are responsible for their own backups, the Center for Research Computing will not create any automatic backups for any user and is not responsible for the deletion or loss of any files from the cluster file system.
+
+## SCRATCH SPACE
+
+The scratch space on the cluster file system is open to all users of the cluster with no space limitations other than the physical limitations of available hard drive space. To keep this shared space clean and available for all users, any file found to be more than 60 days old on the scratch segment of the file system will be automatically deleted. Any user found trying to bypass this will be warned and any subsequent offenses may result in the user's access being revoked. The scratch space is short term storage for immediate use in computation. Any files that need to be kept longer should be kept in a user's \$HOME, \$WORK, or another storage medium.
+
+## DATA CLASSIFICATION AND HANDLING POLICY
+
+In accordance with the Data Classification Policy set forth by the KU Information Technology department, only data classified as Level III is allowed on the KU Community Cluster. The cluster is not configured to handle any other type of data classification properly. If you are found to have any other data other than Level III data on the KU Community Cluster, your account will immediately be suspended, all your jobs cancelled, and effected files removed.
+
+In addition to the policies and procedures put forth by the KU Center for Research Computing, users agree to follow the policies and best-practices of the “biostat” group. This includes:
+
+1\. Use of the “sixhour” partition where and when possible to avoid overconsumption of the “biostat” resources.
+
+2\. Each user will be assigned a 1TB space in their \$WORK directory. If more storage is needed, please contact Drs. Dong Pei and Devin Koestler.
+
+3\. Under no circumstances will I or anyone affiliated with my team upload sensitive data (e.g., Protected Health Information (PHI), research identifiable data, etc.) to the cluster. If you have further questions about whether your data is appropriate to store/analyze on the cluster, please contact Drs. Dong Pei and Devin Koestler
+
+4\. Not running big jobs on the login1 or login2 nodes. To test code prior to submitting batch jobs, request an interactive job. Instructions on how to do this can be found here (<https://crc.ku.edu/hpc/how-to,> see interactive jobs).
+
+5\. Testing code to determine the minimum computing resources need before submitting batch jobs (e.g., number of nodes, number of tasks/cores, amount of RAM, run time, etc.).
+
+6\. Publications or other research output that used HPC resource shall acknowledge the K-INBRE Bioinformatics Core that is supported in part by the National Institute of General Medical Science award (P20 GM103418), the Biostatistics and Informatics Shared Resource, supported by the National Cancer Institute Cancer Center Support Grant (P30 CA168524), and the Kansas Institute for Precision Medicine COBRE, supported by the National Institute of General Medical Science award P20 GM130423.
+
+7\. To conserve resources, account membership with the “biostat” group will be discontinued and all files stored in cluster directories deleted, after three months of position-termination at KUMC. Thus, for graduate student members of the “biostat” group, your membership and directories on the HPC will be wiped after three months post thesis defense (for doctoral students) or three months post-graduation for masters students. Please make arrangements after your defense/graduation to secure whatever data you have on the HPC for later use.
+
+Users understand that violation of any of the above terms above may result in early termination of membership in the “biostat” group
