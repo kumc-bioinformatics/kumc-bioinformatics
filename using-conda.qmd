@@ -55,7 +55,7 @@ nano ~/.bashrc
 which will open the file to edit. You will then paste the following in the file:
 
 ``` bash
-export CONDA=/kuhpc/work/biostat/sw/conda/envs
+export CONDA=/kuhpc/work/biostat/sw/tools_softwares/conda/envs
 ```
 
 and then close and save the file. If you run `cat ~/.bashrc` you should see the line that you added. This means that you have successfully added this variable. For this one session, you will need to reload the file to apply the change using `source ~/.bashrc` or by reopening the terminal. After this, it will automatically be set each time you log in.
