@@ -6,7 +6,7 @@ This page details using shared conda environments in the `biostat` partition of 
 
 ## Setting up the `$CONDA` environment variable
 
-The `biostat` partition maintains a set of shared conda environments located at `/kuhpc/work/biostat/sw/conda/envs` that are used for common bioinformatic pipelines and data types. Rather than typing the full path every time you want to activate a shared environment, we encourage users to set a `$CONDA` environment variable that points to that directory. This lets you activate any shared environment with a short, readable command like:
+The `biostat` partition maintains a set of shared conda environments located at `/kuhpc/work/biostat/sw/tools_softwares/conda/envs` that are used for common bioinformatic pipelines and data types. Rather than typing the full path every time you want to activate a shared environment, we encourage users to set a `$CONDA` environment variable that points to that directory. This lets you activate any shared environment with a short, readable command like:
 
 ``` bash
 conda activate $CONDA/name-of-env
@@ -27,7 +27,7 @@ Use one of the two following options to set the `$CONDA` variable:
 To use the shorthand in your current terminal session, run:
 
 ``` bash
-export CONDA=/kuhpc/work/biostat/sw/conda/envs
+export CONDA=/kuhpc/work/biostat/sw/tools_softwares/conda/envs
 ```
 
 You can then activate any shared environment using just its name:
